@@ -9,7 +9,8 @@ public class Computer extends Block {
 
 	public void giveOrders() { // does not count as activate()ing
 		if (body != null) {
-			for (Block b : body.blockList) {
+			for (int i = 0; i< body.size(); i++) {
+				Block b = body.get(i);
 				if (orders.containsKey(b)) {
 					b.parseOrder(orders.get(b));
 				}

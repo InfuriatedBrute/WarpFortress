@@ -19,8 +19,13 @@ public abstract class Block implements Comparable<Block>, Comparator<Block> {
 	public double health = com.infuriatedbrute.warpfortress.Constants.BASE_DEFAULT_BLOCK_HEALTH;
 	public Body body = new Body(this);
 	public boolean sticky = true;
-
-
+	/**
+	 * A value representing the amount of energy currently stored in this block.
+	 * For all blocks the minimum is 0. For Outputblocks the maximum is between
+	 * 0 and this block's maxPowerRequired() * input. For armorBlocks the
+	 * maximum is 0. For EnergyBlocks the maximum is equal to their maxEnergy().
+	 */
+	public double storedEnergy = 0;
 
 	public abstract void activate();
 
@@ -28,10 +33,8 @@ public abstract class Block implements Comparable<Block>, Comparator<Block> {
 	 * Apply effects of current health (basically delete if health <= 0)
 	 */
 	public void updateHealth() {
-		if (health == 0) {
-			this.body.region.blockList.remove(this);
-			this.body.blockList.remove(this);
-			this.body = null;
+		if (health <= 0) {
+			this.body.remove(this);
 		}
 	}
 
@@ -97,7 +100,9 @@ public abstract class Block implements Comparable<Block>, Comparator<Block> {
 	} // TODO convert game coordinates, x=1 is not 1 pixel away from x = 2
 
 	/**
-	 * @return the texture for this block (facing northward/upward) (even if it hasn't been loaded yet, so long as it's in the assetsfolder and has the correct name)
+	 * @return the texture for this block (facing northward/upward) (even if it
+	 *         hasn't been loaded yet, so long as it's in the assetsfolder and
+	 *         has the correct name)
 	 */
 	private Texture getTexture() {
 		String assetName = getAssetName();

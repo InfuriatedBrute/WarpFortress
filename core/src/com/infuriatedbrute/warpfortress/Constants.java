@@ -24,7 +24,28 @@ public class Constants {
 	public static final double PIERCE_INPUT_MULTIPLIER = 0.1;
 	public static final double RANGE_INPUT_MULTIPLIER = 0.1;
 	public static final int SHIFT_CAMERA_MOVEMENT = 10;
+	public static final int BATTERY_MAX_ENERGY = 10;
+	public static final double BATTERY_ENERGY_GROWTH = 0.1;
+	public static final int BATTERY_TRANSFER_RANGE = 5;
+	public static final double BATTERY_TRANSFER_RATE = 99999;
+	public static final int BATTERY_EXPLOSION_RANGE = 2;
+	public static final boolean BATTERY_EMP_DAMAGE = false;
+	public static final int BATTERY_EXPLOSION_DAMAGE = 1;
+	public static final int REACTOR_MAX_ENERGY = 2;
+	public static final double REACTOR_ENERGY_GROWTH = 0.5;
+	public static final int REACTOR_TRANSFER_RANGE = 2;
+	public static final double REACTOR_TRANSFER_RATE = 99999;
+	public static final int REACTOR_EXPLOSION_RANGE = 2;
+	public static final boolean REACTOR_EMP_DAMAGE = true;
+	public static final int REACTOR_EXPLOSION_DAMAGE = 1;
+	public static final int SHIELD_ARMOR_HEALTH = 1;
+	public static final double GUN_DAMAGE = 1;
+	public static final int SHIELD_PROJECTOR_BASE_ENERGY_COST = 1;
+	public static final double GUN_BASE_ENERGY_COST = 1;
+	public static final double THRUSTER_BASE_ENERGY_COST = 1;
+	public static final double THRUSTER_SPINFORCE_MULTIPLIER = 1;
+	public static final double THRUSTER_XYFORCE_MULTIPLIER = 1;
 	public static int BASE_ARMOR_HEALTH = 5;
 	public static int BASE_DEFAULT_BLOCK_HEALTH = 1;
-
+	public static double DEFAULT_BLOCK_MAX_POWER_REQUIRED = 1;
 }

@@ -8,7 +8,7 @@ public class Body {
 	 * Please sort this using a BlockCoordComparator whenever you apply it for
 	 * an effect
 	 */
-	public ArrayList<Block> blockList = new ArrayList<>();
+	private ArrayList<Block> blockList = new ArrayList<>();
 	public BlockRegion region;
 	/**
 	 * The amount of x spaces the body will attempt to move this turn. Digits to
@@ -32,7 +32,7 @@ public class Body {
 	public Body(Block firstBlock) {
 		blockList.add(firstBlock);
 	}
-
+	
 	/**
 	 * For each xForce, yForce, and spinForce (in a random order, but always
 	 * with spinForce last) move it by one in the given direction, unless there
@@ -43,7 +43,7 @@ public class Body {
 	 * remaining force will be used to move as normal. After this is done, move
 	 * the bodies whose forces were affected (in a somewhat arbitrary order).
 	 * 
-	 * A 100 line and very complex method. Difficult even to explain.
+	 * A 200 line and very complex method. Difficult even to explain.
 	 */
 	public void move() {
 		// create mutable versions for shortened code
@@ -83,6 +83,50 @@ public class Body {
 		for (Body b : toMove) {
 			b.move();
 		}
+	}
+	
+	/**
+	 * Invoked when a block would be removed from the blockList. Checks for separation into separate bodies and removes from the body's region
+	 * @param b the block removed
+	 */
+	public void remove(Block b){
+		
+	}
+	
+	
+	/**
+	 * Invoked when a block would be added to the blockList. Checks for joining into multiple bodies and removes from the body's region.
+	 * @param b the block added
+	 */
+	public void add(Block b){
+		
+	}
+	
+	/**
+	 * 
+	 * @return blockList.get(index)
+	 * @see ArrayList.get()
+	 */
+	public Block get(int index){
+		return blockList.get(index);
+	}
+	
+	/**
+	 * 
+	 * @return blockList.size()
+	 * @see ArrayList.size()
+	 */
+	public int size(){
+		return blockList.size();
+	}
+	
+	/**
+	 * 
+	 * @return blockList.contains(Object o)
+	 * @see ArrayList.contains(Object o)
+	 */
+	public boolean contains(Object o){
+		return blockList.contains(o);
 	}
 
 	/**
@@ -147,16 +191,32 @@ public class Body {
 	 *            if true spin clockwise, otherwise spin counter-clockwise
 	 */
 	public void spinSnippet(boolean positive) {
+		double averageX = 0;
+		double averageY = 0;
+		for(Block b : blockList){
+			averageX+=b.x;
+			averageY+=b.y;
+		}
+		averageX /= blockList.size();
+		averageY /= blockList.size();
+		if(Math.random()<(averageX%1)){
+			averageX++;
+		}
+		if(Math.random()<(averageY%1)){
+			averageY++;
+		}
+		averageX = Math.floor(averageX);
+		averageY = Math.floor(averageY);
 		if (positive) {
 			for (Block b : blockList) {
-				int toY = b.x;
-				b.x = (-1 * b.y);
+				int toY = (int) (b.x-averageX);
+				b.x = (int)(-1 * (b.y-averageY));
 				b.y = toY;
 			}
 		} else {
 			for (Block b : blockList) {
-				int toX = b.y;
-				b.y = (-1 * b.x);
+				int toX = (int)(b.y-averageY);
+				b.y = (int)(-1*  (b.x-averageX));
 				b.x = toX;
 			}
 		}
@@ -168,8 +228,19 @@ public class Body {
 			}
 		}
 		if (undo) {
-			// this probably won't create an infinite cycle
-			spinSnippet(!positive);
+			if (!positive) {
+				for (Block b : blockList) {
+					int toY = (int) (b.x-averageX);
+					b.x = (int)(-1 * (b.y-averageY));
+					b.y = toY;
+				}
+			} else {
+				for (Block b : blockList) {
+					int toX = (int)(b.y-averageY);
+					b.y = (int)(-1*  (b.x-averageX));
+					b.x = toX;
+				}
+			}
 		}
 	}
 }

@@ -1,9 +1,9 @@
 package com.infuriatedbrute.warpfortress;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 public abstract class TargettingBlock extends OutputBlock {
-
 	int range = 0;
 	int pierce = 0;
 
@@ -31,14 +31,14 @@ public abstract class TargettingBlock extends OutputBlock {
 				}
 				break;
 			case 4:
-				try{
+				try {
 					range = Integer.parseInt(order);
 				} catch (NumberFormatException e) {
 					com.infuriatedbrute.warpfortress.StaticMethods.blankOrderMessage(this.toString());
 				}
 				break;
 			case 5:
-				try{
+				try {
 					pierce = Integer.parseInt(order);
 				} catch (NumberFormatException e) {
 					com.infuriatedbrute.warpfortress.StaticMethods.blankOrderMessage(this.toString());
@@ -48,5 +48,42 @@ public abstract class TargettingBlock extends OutputBlock {
 		}
 		input *= (1 + com.infuriatedbrute.warpfortress.Constants.RANGE_INPUT_MULTIPLIER * range);
 		input *= (1 + com.infuriatedbrute.warpfortress.Constants.PIERCE_INPUT_MULTIPLIER * pierce);
+	}
+
+	/**
+	 * Since multitargetting is currently unimplemented the list is always one
+	 * element.
+	 * 
+	 * @return A list of arrays whose first element is the x-coordinate of a
+	 *         targetblock, and whose second element is the y-coordinate of a
+	 *         targetblock.
+	 */
+	private ArrayList<int[]> targetLocations() {
+		ArrayList<int[]> toReturn = new ArrayList<>();
+		switch (rotation) {
+		case 0:
+			toReturn.add(new int[] { x, y + range });
+			break;
+		case 90:
+			toReturn.add(new int[] { x - range, y });
+			break;
+		case 180:
+			toReturn.add(new int[] { x, y - range });
+			break;
+		case 270:
+			toReturn.add(new int[] { x + range, y });
+			break;
+		}
+		return toReturn;
+	}
+
+	public ArrayList<Block> targetBlocks() {
+		ArrayList<Block> toReturn = new ArrayList<>();
+		for (int[] i : targetLocations()) {
+			LinkedHashSet<Block> bl = body.region.blocksNear(i[0], i[1], 0, 0);
+			assert bl.size() <= 1;
+			toReturn.addAll(bl);
+		}
+		return toReturn;
 	}
 }
